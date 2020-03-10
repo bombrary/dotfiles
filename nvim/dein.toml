@@ -1,0 +1,13 @@
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+hook_add='''
+  colorscheme iceberg
+'''
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+hook_add='''
+'''
+
+[[plugins]]
+repo = 'nelstrom/vim-visual-star-search'
