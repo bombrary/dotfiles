@@ -1,22 +1,193 @@
 [[plugins]]
+repo = 'Shougo/ddc.vim'
+on_event='InsertEnter'
+hook_source = '''
+	" Customize global settings
+
+	" Use around source.
+	call ddc#custom#patch_global('sources', ['around', 'nvim-lsp'])
+
+	" Use matcher_head and sorter_rank.
+	call ddc#custom#patch_global('sourceOptions', {
+	      \ '_': {
+	      \   'matchers': ['matcher_head'],
+	      \   'sorters': ['sorter_rank']},
+	      \ })
+
+	" Change source options
+	call ddc#custom#patch_global('sourceOptions', {
+	      \ 'around': {'mark': 'A'},
+        \ 'nvim-lsp': {
+        \   'mark': 'lsp',
+        \   'forceCompletionPattern': '\.\w*|:\w*|->\w*' },
+        \ })
+	call ddc#custom#patch_global('sourceParams', {
+	      \ 'around': {'maxSize': 500},
+        \ 'nvim-lsp': { 'kindLabels': { 'Class': 'c' } },
+	      \ })
+
+	" Mappings
+
+	" <TAB>: completion.
+	inoremap <silent><expr> <TAB>
+	\ pumvisible() ? '<C-n>' :
+	\ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+	\ '<TAB>' : ddc#manual_complete()
+
+	" <S-TAB>: completion back.
+	inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
+
+	" Use ddc.
+	call ddc#enable()
+'''
+
+
+[[plugins]]
+repo = 'Shougo/ddc-around'
+on_source = 'ddc.vim'
+
+[[plugins]]
+ repo = 'Shougo/ddc-matcher_head'
+ on_source = 'ddc.vim'
+
+[[plugins]]
+ repo = 'Shougo/ddc-sorter_rank'
+ on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-nvim-lsp'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'matsui54/ddc-nvim-lsp-doc'
+on_source = 'ddc.vim'
+hook_source = '''
+let g:ddc_nvim_lsp_doc_config = {
+     \ 'documentation': {
+     \   'enable': v:true,
+     \   'border': 'single',
+     \   'maxWidth': 60,
+     \   'maxHeight': 30,
+     \ },
+     \ 'signature': {
+     \   'maxHeight': 5,
+     \ },
+     \ }
+call ddc_nvim_lsp_doc#enable()
+'''
+
+
+[[plugins]]
 repo='lervag/vimtex'
 on_ft=['tex']
 hook_source='''
-  let g:vimtex_view_general_viewer = 'sumatraPDF.exe'
-  let g:vimtex_view_general_options = '-reuse-instance @pdf'
-  let g:vimtex_view_general_options_latexmk = '-reuse-instance'
+  let g:vimtex_compiler_latexmk = {
+        \ 'background': 1,
+        \ 'build_dir': '',
+        \ 'continuous': 1,
+        \ 'options': [
+        \    '-lualatex', 
+        \    '-verbose',
+        \    '-file-line-error',
+        \    '-synctex=1',
+        \    '-interaction=nonstopmode',
+        \],
+        \}
+
+  let g:vimtex_view_general_viewer
+        \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+  let g:vimtex_view_general_options = '-r @line @pdf @tex'
 '''
 
 [[plugins]]
-repo='iamcco/markdown-preview.nvim'
-on_ft=['markdown', 'pandoc.markdown', 'rmd']    
-hook_source='''
-  let g:mkdp_open_ip = '6789'
-'''
-
-[[plugins]]
-repo='Zaptic/elm-vim'
+repo="elm-tooling/elm-vim"
 on_ft=['elm']
+
+
+[[plugins]]
+repo="purescript-contrib/purescript-vim"
+on_ft=['purescript']
+merge_ftdetect = true
 hook_source='''
-  let g:elm_setup_keybindings = 0
+  syntax on
+  filetype on
+  filetype plugin indent on
+  let g:purescript_indent_case = 2
+'''
+
+[[plugins]]
+repo = 'Vimjas/vim-python-pep8-indent'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'vim-python/python-syntax'
+on_ft = 'python'
+hook_source='''
+let g:python_highlight_all = 1
+'''
+
+[[plugins]]
+repo = 'itchyny/vim-pdf'
+on_ft = 'pdf'
+
+[[plugins]]
+repo = 'nbouscal/vim-stylish-haskell'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'vmchale/dhall-vim'
+on_ft = 'dhall'
+
+[[plugins]]
+repo = 'tell-k/vim-autopep8'
+on_ft = ['python']
+hook_add = '''
+let g:autopep8_ignore="E501"
+'''
+
+[[plugins]]
+repo = 'neovimhaskell/haskell-vim'
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'vlime/vlime'
+rtp = 'vim/'
+on_ft = ['lisp']
+
+[[plugins]]
+repo = 'jalvesaq/Nvim-R'
+on_ft = ['r']
+
+[[plugins]]
+repo = 'tidalcycles/vim-tidal'
+on_ft = ['tidal']
+hook_source='''
+let g:tidal_target = "terminal"
+'''
+
+[[plugins]]
+repo='idris-hackers/idris-vim'
+merge_ftdetect = true
+on_ft = ['idris']
+
+[[plugins]]
+repo='rust-lang/rust.vim'
+on_ft=['rust']
+
+[[plugins]]
+repo = 'LeafCage/vimhelpgenerator'
+on_cmd = ['VimHelpGenerator', 'VimHelpGeneratorVirtual']
+hook_add = '''
+let g:vimhelpgenerator_defaultlanguage = 'en'
+let g:vimhelpgenerator_version = ''
+let g:vimhelpgenerator_author = 'Author  : koturn'
+let g:vimhelpgenerator_contents = {
+      \ 'contents': 1, 'introduction': 1, 'usage': 1, 'interface': 1,
+      \ 'variables': 1, 'commands': 1, 'key-mappings': 1, 'functions': 1,
+      \ 'setting': 0, 'todo': 1, 'changelog': 0
+      \}
 '''
