@@ -1,3 +1,6 @@
+filetype off
+filetype plugin indent off
+
 set t_Co=256           "screen が 256色"
 set autoindent         "改行時に自動でインデントする
 set splitright         "画面を縦分割する際に右に開く
@@ -19,8 +22,9 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 
+tnoremap <Esc> <C-\><C-n>
 
-"dein Scripts-----------------------------
+"dein Scripts-----------------------------                                                          
 if &compatible
   set nocompatible               " Be iMproved
 endif
@@ -29,26 +33,24 @@ endif
 set runtimepath+=/Users/bombrary/.cache/dein/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('/Users/bombrary/.cache/dein')
-  call dein#begin('/Users/bombrary/.cache/dein')
+call dein#begin('/Users/bombrary/.cache/dein')
 
-  " Let dein manage dein
-  " Required:
-  call dein#add('/Users/bombrary/.cache/dein/repos/github.com/Shougo/dein.vim')
-  call dein#add('cocopon/iceberg.vim')
-  call dein#add('ulwlu/elly.vim')
-  call dein#add('nvim-treesitter/nvim-treesitter', {'hook_post_update': 'TSUpdate'})
+" Let dein manage dein
+" Required:
+call dein#add('/Users/bombrary/.cache/dein/repos/github.com/Shougo/dein.vim')
 
-  let s:toml = '~/.config/nvim/dein.toml'
-  let s:lazy_toml = '~/.config/nvim/dein_lazy.toml'
-  call dein#load_toml(s:toml, {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+" Add or remove your plugins here like this:
+call dein#add('cocopon/iceberg.vim')
+call dein#add('ulwlu/elly.vim')
+call dein#add('nvim-treesitter/nvim-treesitter', {'hook_post_update': 'TSUpdate'})
 
-  " Required:
-  call dein#end()
-  call dein#call_hook('source')
-  call dein#save_state()
-endif
+let s:toml = '~/.config/nvim/dein.toml'
+let s:lazy_toml = '~/.config/nvim/dein_lazy.toml'
+call dein#load_toml(s:toml, {'lazy': 0})
+call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+" Required:
+call dein#end()
 
 " Required:
 filetype plugin indent on
@@ -62,7 +64,7 @@ endif
 "End dein Scripts-------------------------
 
 
-colorscheme elly
+colorscheme iceberg
 set termguicolors
 
 
@@ -80,33 +82,43 @@ set completeopt=menuone
 autocmd BufNewFile,BufRead *.plt  set filetype=gnuplot
 
 lua <<EOF
-local hlmap = vim.treesitter.highlighter.hl_map
-hlmap["text.verb"] = "texVerbZone"
-
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true,
-    disable = { "purescript" }
+    disable = { "purescript", "latex" }
   },
 }
 
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.asir = {
   install_info = {
-    url = "~/repos/tree-sitter-asir",
+    url = "~/repos/bombrary/tree-sitter-asir",
     files = {"src/parser.c"}
   },
   filetype = "rr"
 }
-
-parser_config.latex = {
-  install_info = {
-    url = "~/repos/tree-sitter-latex",
-    files = {"src/parser.c"}
-  },
-  filetype = "tex"
-}
 EOF
 
-let g:session_path = '.'
+function! SetLightTheme()
+  colorscheme iceberg
+  set background=light
+  let g:lightline.colorscheme = 'iceberg'
+
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+function! SetDarkTheme()
+  colorscheme elly
+  let g:lightline.colorscheme = 'elly'
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+command! -bar Termopen vsplit +terminal | echo &channel
+
+command! SetLightTheme call SetLightTheme()
+command! SetDarkTheme call SetDarkTheme()

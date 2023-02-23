@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/Users/bombrary/pworks/repos/blog/content/posts/purescript-brainfuck03'
+let g:netrw_dirhist_8='/Users/bombrary/pworks/repos/blog/content/posts/purescript-brainfuck01'
+let g:netrw_dirhist_7='/Users/bombrary/pworks/repos/blog/content/posts/purescript-brainfuck'
+let g:netrw_dirhist_6='/Users/bombrary/pworks/repos/blog/content/posts/regression-gradient-descent'
+let g:netrw_dirhist_5='/Users/bombrary/pworks/repos/blog/content/posts/regression-lstsq'
+let g:netrw_dirhist_4='/Users/bombrary/pworks/research/report/00'
+let g:netrw_dirhist_3='/Users/bombrary/pworks/repos/blog/content/posts/django-todo-list'
+let g:netrw_dirhist_2='/Users/bombrary/pworks/repos/blog/content/posts/todo-api-werkzeug'
+let g:netrw_dirhist_1='/Users/bombrary/pworks/repos/blog/content/posts/todo-api-wsgi'
+let g:netrw_dirhist_0='/Users/bombrary/pworks/repos/blog/content/posts/todo-api-werkzeug'

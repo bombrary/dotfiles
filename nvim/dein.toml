@@ -5,52 +5,104 @@ repo = 'nelstrom/vim-visual-star-search'
 repo = 'vim-denops/denops.vim'
 
 [[plugins]]
-repo = 'Shougo/denite.nvim'
+repo = 'Shougo/ddu.vim'
 hook_add = '''
-  nmap <silent> ,f :<C-u>Denite file/rec<CR>
-  nmap <silent> ,g :<C-u>Denite grep<CR>
-  nmap <silent> ,b :<C-u>Denite buffer<CR>
-  nmap <silent> ,l :<C-u>Denite line<CR>
+call ddu#custom#patch_global({
+    \   'ui': 'ff',
+    \   'sources': [
+    \     {'name': 'file_rec', 'params': {}},
+    \     {'name': 'buffer', 'params': {}},
+    \     {'name': 'rg', 'params': {}},
+    \   ],
+    \   'sourceOptions': {
+    \     '_': {
+    \       'matchers': ['matcher_fzf'],
+    \     },
+    \     'rg' : {
+    \       'args': ['--column', '--no-heading', '--color', 'never'],
+    \     },
+    \   },
+    \   'kindOptions': {
+    \     'file': {
+    \       'defaultAction': 'open',
+    \     },
+    \     'buffer': {
+    \       'defaultAction': 'open',
+    \     },
+    \   }
+    \ })
 
-  " Define mappings
-  autocmd FileType denite call s:denite_my_settings()
-  function! s:denite_my_settings() abort
-    nnoremap <silent><buffer><expr> <CR>
-    \ denite#do_map('do_action')
-    nnoremap <silent><buffer><expr> d
-    \ denite#do_map('do_action', 'delete')
-    nnoremap <silent><buffer><expr> p
-    \ denite#do_map('do_action', 'preview')
-    nnoremap <silent><buffer><expr> q
-    \ denite#do_map('quit')
-    nnoremap <silent><buffer><expr> i
-    \ denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> <Space>
-    \ denite#do_map('toggle_select').'j'
-  endfunction
+call ddu#custom#patch_local(  'file', {'sources': [{'name': 'file_rec'}]})
+call ddu#custom#patch_local('buffer', {'sources': [{'name': 'buffer'}]})
+call ddu#custom#patch_local('rg', {'sources': [{'name': 'buffer'}]})
 
-  " Change file/rec command.
-  call denite#custom#var('file/rec', 'command',
-  \ ['rg', '--files', '--glob', '!.git'])
+nnoremap <silent> ,f :<C-u>call ddu#start({'name': 'file'})<CR>
+nnoremap <silent> ,b :<C-u>call ddu#start({'name': 'buffer'})<CR>
 
-  " Ripgrep command on grep source
-  call denite#custom#var('grep', 'command', ['rg'])
-  call denite#custom#var('grep', 'default_opts',
-      \ ['-i', '--vimgrep', '--no-heading'])
-  call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-  call denite#custom#var('grep', 'separator', ['--'])
-  call denite#custom#var('grep', 'final_opts', [])
-
-  " Specify multiple paths in grep source
-  "call denite#start([{'name': 'grep',
-  "      \ 'args': [['a.vim', 'b.vim'], '', 'pattern']}])
+command! -nargs=1 Grep call ddu#start(
+  \ {'name': 'rg',
+  \  'sources': [{ 'name': 'rg', 'params': { 'input': <q-args> } }]
+  \ })
 '''
+
+[[plugins]]
+repo = 'Shougo/ddu-ui-ff'
+hook_add = '''
+function! s:ddu_my_settings() abort
+  nnoremap <buffer><silent> <CR>
+        \ <Cmd>call ddu#ui#ff#do_action('itemAction')<CR>
+  nnoremap <buffer><silent> <Space>
+        \ <Cmd>call ddu#ui#ff#do_action('toggleSelectItem')<CR>
+  nnoremap <buffer><silent> i
+        \ <Cmd>call ddu#ui#ff#do_action('openFilterWindow')<CR>
+  nnoremap <buffer><silent> q
+        \ <Cmd>call ddu#ui#ff#do_action('quit')<CR>
+
+  if b:ddu_ui_name ==# 'buffer'
+    nnoremap <buffer><silent> d
+          \ <Cmd>call ddu#ui#ff#do_action('itemAction', {'name': 'delete'})<CR>
+  endif
+endfunction
+
+function! s:ddu_filter_my_settings() abort
+  inoremap <buffer><silent> <CR>
+  \ <Esc><Cmd>call ddu#ui#ff#close()<CR>
+  nnoremap <buffer><silent> <CR>
+  \ <Cmd>call ddu#ui#ff#close()<CR>
+  nnoremap <buffer><silent> q
+  \ <Cmd>call ddu#ui#ff#close()<CR>
+endfunction
+
+autocmd FileType ddu-ff-filter call s:ddu_filter_my_settings()
+autocmd FileType ddu-ff call s:ddu_my_settings()
+'''
+
+[[plugins]]
+repo = 'Shougo/ddu-source-action'
+
+[[plugins]]
+repo = 'Shougo/ddu-source-file_rec'
+
+[[plugins]]
+repo = '~/repos/bombrary/ddu-buffer'
+
+[[plugins]]
+repo = 'shun/ddu-source-rg'
+
+[[plugins]]
+repo = 'Shougo/ddu-filter-matcher_substring'
+
+[[plugins]]
+repo = 'yuki-yano/ddu-filter-fzf'
+
+[[plugins]]
+repo = 'Shougo/ddu-kind-file'
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 hook_add = '''
 lua << EOF
+
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -62,33 +114,56 @@ local on_attach = function(client, bufnr)
   local opts = { noremap=true, silent=true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 end
 
 local nvim_lsp = require('lspconfig')
+
+local exists = function(filename)
+    local stat = vim.loop.fs_stat(filename)
+    return stat and stat.type or false
+end
+
+local cwd=vim.fn.getcwd()
+
+local setup_pyright_cmd = function()
+  if exists('docker-compose.yml') then
+    return {'docker-compose', 'run', '-T',
+           '--volume='..cwd..':'..cwd,
+           '--workdir='..cwd,
+           '--entrypoint=pyright-langserver',
+           '--rm',
+           'lsp', '--stdio'}
+  else
+    return nvim_lsp.pyright.cmd
+  end
+end
 
 -- python setup
 nvim_lsp.pyright.setup {
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,
-    }
+    },
 }
 
 -- lua setup
@@ -124,16 +199,23 @@ nvim_lsp.sumneko_lua.setup {
   },
 }
 -- typescript setup
-nvim_lsp.tsserver.setup {
-    root_dir = vim.loop.cwd,
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
+--nvim_lsp.tsserver.setup {
+--    root_dir = vim.loop.cwd,
+--    on_attach = on_attach,
+--    flags = {
+--      debounce_text_changes = 150,
+--    }
+--}
+
+
+-- deno setup
+nvim_lsp.denols.setup{
+  on_attach = on_attach
 }
 
 -- rust setup
 nvim_lsp.rls.setup {
+  on_attach = on_attach,
   settings = {
     rust = {
       unstable_features = true,
@@ -162,7 +244,9 @@ require'lspconfig'.cssls.setup {
 }
 
 -- vim setup
-require'lspconfig'.vimls.setup{}
+require'lspconfig'.vimls.setup{
+  on_attach = on_attach
+}
 
 -- purescript setup
 require'lspconfig'.purescriptls.setup {
@@ -176,6 +260,33 @@ require'lspconfig'.purescriptls.setup {
     debounce_text_changes = 150,
   }
 }
+
+-- julia setup
+require'lspconfig'.julials.setup {
+  on_attach = on_attach,
+}
+
+-- tex setup
+require'lspconfig'.texlab.setup{
+  on_attach = on_attach,
+}
+
+-- java setup (1)
+--nvim_lsp.java_language_server.setup{
+-- on_attach = on_attach,
+-- cmd = { 'sh', '/Users/bombrary/.cache/java-language-server/dist/lang_server_mac.sh' },
+-- settings = {
+--   java = {
+--     externalDependencies = { "org.springframework.boot:spring-boot:2.6.7" }
+--   }
+-- },
+--}
+
+--- satysfi setup
+nvim_lsp['satysfi-ls'].setup{
+  on_attach = on_attach,
+  autostart = true
+}
 EOF
 '''
 
@@ -184,14 +295,27 @@ EOF
 repo = 'itchyny/lightline.vim'
 hook_add ='''
 let g:lightline = {
-      \ 'colorscheme': 'elly',
+      \ 'colorscheme': 'iceberg',
       \ }
 '''
 
+
 [[plugins]]
-repo='JuliaEditorSupport/julia-vim'
-on_ft = ['julia']
+repo = 'goerz/jupytext.vim'
+hook_add = '''
+" セルの区切り文字をVSCode互換の # %% に指定する
+let g:jupytext_fmt = 'py:percent'
+
+" vimのPython向けシンタックスハイライトを有効にする
+let g:jupytext_filetype_map = {'py': 'python'}
+'''
 
 
 [[plugins]]
-repo='~/repos/bombrary/vim-asir'
+repo = 'jpalardy/vim-slime'
+hook_add = '''
+let g:slime_target = "neovim"
+let g:slime_python_ipython = 1
+let g:slime_cell_delimiter = "# %%"
+let g:slime_dont_ask_default = 1
+'''
