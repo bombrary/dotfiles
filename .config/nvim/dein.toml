@@ -18,9 +18,6 @@ call ddu#custom#patch_global({
     \     '_': {
     \       'matchers': ['matcher_fzf'],
     \     },
-    \     'rg' : {
-    \       'args': ['--column', '--no-heading', '--color', 'never'],
-    \     },
     \   },
     \   'kindOptions': {
     \     'file': {
@@ -28,6 +25,11 @@ call ddu#custom#patch_global({
     \     },
     \     'buffer': {
     \       'defaultAction': 'open',
+    \     },
+    \   },
+    \   'sourceParams': {
+    \     'rg' : {
+    \       'args': ['--column', '--no-heading', '--color', 'never'],
     \     },
     \   }
     \ })
