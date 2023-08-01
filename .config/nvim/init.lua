@@ -1,48 +1,39 @@
-local opt = vim.opt
+vim.opt.autoindent = true
+vim.opt.splitright = true
+vim.opt.hls = true
+vim.opt.number = true
+vim.opt.whichwrap = 'b', 's', 'h', 'l', '<', '>', '[', ']'
+vim.opt.cursorline=true
+vim.opt.expandtab=true
+vim.opt.tabstop=2
+vim.opt.shiftwidth=2
+vim.opt.helplang = 'ja', 'en'
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.showmatch = true
+vim.opt.clipboard:append({unnamedplus = true})
+vim.opt.list = true
+vim.opt.listchars = {tab = '>-', trail = '*', nbsp = '+', eol = '↲', extends = '»', precedes = '«'}
 
-opt.autoindent = true
-opt.splitright = true
-opt.hls = true
-opt.number = true
-opt.whichwrap = 'b', 's', 'h', 'l', '<', '>', '[', ']'
-opt.cursorline=true
-opt.expandtab=true
-opt.tabstop=2
-opt.shiftwidth=2
-opt.helplang = 'ja', 'en'
-opt.expandtab = true
-opt.tabstop = 2
-opt.shiftwidth = 2
-opt.showmatch = true
-opt.clipboard:append({unnamedplus = true})
-opt.list = true
-opt.listchars = {tab = '>-', trail = '*', nbsp = '+', eol = '↲', extends = '»', precedes = '«'}
-
-
-local dein_base = '/home/bombrary/.cache/dein'
-local dein_src = '/home/bombrary/.cache/dein/repos/github.com/Shougo/dein.vim'
-opt.runtimepath:prepend(dein_src)
-
-local dein = require('dein')
-dein.setup {
-  auto_remote_plugins = false,
-  enable_notification = true,
-}
-
-dein.begin(dein_base)
-
-dein.add('Shougo/dein.vim', { on_ft = {'vim'} })
-
-dein.load_toml('/home/bombrary/.config/nvim/dein.toml', { lazy=false })
-dein.load_toml('/home/bombrary/.config/nvim/dein_lazy.toml', { lazy=true })
-
-dein.add('sainnhe/everforest')
-
-dein.end_()
-
-if dein.check_install() then
-  dein.install()
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
-
-vim.cmd.colorscheme('everforest')
+require'lazy'.setup("plugins", {
+  git = {
+    log = { "-8" }, -- show commits from the last 3 days
+    timeout = 120, -- kill processes that take more than 2 minutes
+    url_format = "git@github.com:%s.git",
+    filter = true,
+  },
+})
