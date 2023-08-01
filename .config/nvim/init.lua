@@ -12,7 +12,7 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.showmatch = true
-vim.opt.clipboard:append({unnamedplus = true})
+vim.opt.clipboard:append{'unnamedplus'}
 vim.opt.list = true
 vim.opt.listchars = {tab = '>-', trail = '*', nbsp = '+', eol = '↲', extends = '»', precedes = '«'}
 
