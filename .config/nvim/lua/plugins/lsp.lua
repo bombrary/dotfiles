@@ -31,7 +31,25 @@ return {
           enableAdditionalTextEdit = true,
         },
       }})
-      vim.fn['ddc#enable']()
+
+       vim.keymap.set('i', '<Tab>', function()
+         if vim.fn.pumvisible() == 1 then
+           return "<C-n>"
+         else
+           local pos = vim.inspect_pos()
+           if pos.col <= 0 then
+             return "<Tab>"
+           end
+           local c = vim.api.nvim_get_current_line():sub(pos.col, pos.col)
+           if string.match(c, "%s") then
+             return "<Tab>"
+           else
+             vim.fn["ddc#map#manual_complete"]()
+           end
+         end
+       end, { expr = true })
+      
+       vim.fn['ddc#enable']()
     end,
   },
   {
@@ -41,6 +59,7 @@ return {
       local lspconfig = require('lspconfig')
       lspconfig.pyright.setup {}
       lspconfig.tsserver.setup {}
+      lspconfig.terraform_lsp.setup{}
       lspconfig.rust_analyzer.setup {
         -- Server-specific settings. See `:help lspconfig-setup`
         settings = {

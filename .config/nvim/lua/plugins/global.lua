@@ -65,5 +65,16 @@ return {
       vim.keymap.set('n', ',f', '<Cmd>call ddu#start({})<CR>', opt)
       vim.keymap.set('n', ',b', '<Cmd>call ddu#start({\'sources\': [{\'name\': \'buffer\', \'params\': {}}] })<CR>', opt)
     end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require'nvim-treesitter.configs'.setup {
+        ensure_installed = "all",
+        highlight = {
+          enable = true,
+        },
+      }
+    end,
   }
 }
