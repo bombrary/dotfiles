@@ -4,13 +4,13 @@ return {
     config = function()
       vim.cmd([[colorscheme everforest]])
     end,
-  },
-  {
+  }, {
     "Shougo/ddu.vim",
     dependencies = {
       "vim-denops/denops.vim",
       "Shougo/ddu-source-file_rec",
       "Shougo/ddu-source-buffer",
+      "Shougo/ddu-source-rg",
       "Shougo/ddu-filter-matcher_substring",
       "Shougo/ddu-kind-file",
       "Shougo/ddu-ui-ff",
@@ -25,11 +25,25 @@ return {
       \       'matchers': ['matcher_substring'],
       \     },
       \   },
+      \   'sourceParams': {
+      \     '_': {
+      \       'matchers': ['matcher_substring'],
+      \     },
+      \     'rg': {
+      \       'args': [ '--column', '--no-heading', '--color', 'never', '--json'],
+      \     }
+      \   },
       \   'kindOptions': {
       \     'file': {
       \       'defaultAction': 'open',
       \     },
-      \   }
+      \   },
+      \   'uiParams': {
+      \     'ff': {
+      \       'split': 'floating',
+	    \       'previewFloating': v:true,
+      \     },
+      \   },
       \ })
       ]])
 
@@ -43,6 +57,8 @@ return {
                   \ <Cmd>call ddu#ui#ff#do_action('toggleSelectItem')<CR>
             nnoremap <buffer><silent> i
                   \ <Cmd>call ddu#ui#ff#do_action('openFilterWindow')<CR>
+            nnoremap <buffer><silent> p
+                  \ <Cmd>call ddu#ui#ff#do_action('preview')<CR>
             nnoremap <buffer><silent> q
                   \ <Cmd>call ddu#ui#ff#do_action('quit')<CR>
           ]])
@@ -64,6 +80,10 @@ return {
       })
       vim.keymap.set('n', ',f', '<Cmd>call ddu#start({})<CR>', opt)
       vim.keymap.set('n', ',b', '<Cmd>call ddu#start({\'sources\': [{\'name\': \'buffer\', \'params\': {}}] })<CR>', opt)
+      vim.api.nvim_create_user_command('Grep',
+        'call ddu#start({\'sources\': [{\'name\': \'rg\', \'params\': {\'input\': <q-args>}}] })',
+        { nargs = 1 }
+      )
     end
   },
   {

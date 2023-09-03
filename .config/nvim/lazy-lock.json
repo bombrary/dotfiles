@@ -9,6 +9,7 @@
   "ddu-kind-file": { "branch": "main", "commit": "b033b7330384f494d4256a55dd97696cb6c5230c" },
   "ddu-source-buffer": { "branch": "main", "commit": "fa9d6e8f678038abac2a8c6076057478a616048a" },
   "ddu-source-file_rec": { "branch": "main", "commit": "4cbab6e1e972b41023d08bb2e7dd4d2c08635f19" },
+  "ddu-source-rg": { "branch": "main", "commit": "76e6699d449e1b6a978c450b1a8ad76efea47bdd" },
   "ddu-ui-ff": { "branch": "main", "commit": "348d8009ce6be2027b050ce4650f9d4e1ef74407" },
   "ddu.vim": { "branch": "main", "commit": "3e1532e6a3c7714d32e791cabdcee886fd361f04" },
   "denops.vim": { "branch": "main", "commit": "22e7ae3d712f190b3f46483e6b9dd50a99a9abbd" },
