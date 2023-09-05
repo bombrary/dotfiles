@@ -2,59 +2,74 @@ return {
   {
     "Shougo/ddc.vim",
     dependencies = {
+      "vim-denops/denops.vim",
       "Shougo/ddc-source-around",
       "Shougo/ddc-source-nvim-lsp",
       "Shougo/ddc-filter-matcher_head",
       "Shougo/ddc-filter-sorter_rank",
       "Shougo/ddc-ui-native",
+      "L3MON4D3/LuaSnip",
     },
     event = 'InsertEnter',
     config = function() 
-      vim.fn['ddc#custom#patch_global']({ sources = { 'around', 'nvim-lsp' } })
-      vim.fn['ddc#custom#patch_global']({ ui = 'native' })
-      vim.fn['ddc#custom#patch_global']({ sourceOptions = {
-        ['around'] = {
-          mark = 'A',
+      vim.fn['ddc#custom#patch_global']({
+        ui = 'native',
+        sources = { 'around', 'nvim-lsp' },
+        sourceOptions = {
+          ['around'] = {
+            mark = 'A',
+          },
+          ['nvim-lsp'] = {
+            mark = 'lsp',
+            dup = 'keep',
+            keywordPattern = '\\k+',
+            sorters = { 'sorter_lsp-kind' },
+          },
+          _ = {
+            matchers = { 'matcher_head' },
+            sorters = { 'sorter_rank' }
+          }
         },
-        ['nvim-lsp'] = {
-          mark = 'lsp',
-          forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
+        sourceParams = {
+            ['nvim-lsp'] = {
+              enableResolveItem = true,
+              enableAdditionalTextEdit = true,
+              confirmBehavior = 'replace',
+            },
         },
-        _ = {
-          matchers = { 'matcher_head' },
-          sorters = { 'sorter_rank' }
-        },
-      }})
-      vim.fn['ddc#custom#patch_global']({ sourceParams = {
-        ['nvim-lsp'] = {
-          enableResolveItem = true,
-          enableAdditionalTextEdit = true,
-        },
-      }})
+      })
+      vim.fn["denops#callback#register"](function(body)
+        require('luasnip').lsp_expand(body)
+      end)
 
-       vim.keymap.set('i', '<Tab>', function()
-         if vim.fn.pumvisible() == 1 then
-           return "<C-n>"
-         else
-           local pos = vim.inspect_pos()
-           if pos.col <= 0 then
-             return "<Tab>"
-           end
-           local c = vim.api.nvim_get_current_line():sub(pos.col, pos.col)
-           if string.match(c, "%s") then
-             return "<Tab>"
-           else
-             vim.fn["ddc#map#manual_complete"]()
-           end
-         end
-       end, { expr = true })
-      
-       vim.fn['ddc#enable']()
+      vim.keymap.set('i', '<Tab>', function()
+        if vim.fn.pumvisible() == 1 then
+          return "<C-n>"
+        else
+          local pos = vim.inspect_pos()
+          if pos.col <= 0 then
+            return "<Tab>"
+          end
+          local c = vim.api.nvim_get_current_line():sub(pos.col, pos.col)
+          if string.match(c, "%s") then
+            return "<Tab>"
+          else
+            vim.fn["ddc#map#manual_complete"]()
+          end
+        end
+      end, { expr = true })
+      vim.fn['ddc#enable']()
     end,
   },
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "Shougo/ddc.vim",
+      "uga-rosa/ddc-nvim-lsp-setup",
+    },
     config = function()
+      require("ddc_nvim_lsp_setup").setup()
+
       -- Setup language servers.
       local lspconfig = require('lspconfig')
       lspconfig.pyright.setup {}
@@ -110,5 +125,17 @@ return {
         end,
       })
     end,
+  },
+  {
+    "matsui54/denops-signature_help",
+    config = function()
+     vim.fn['signature_help#enable']()
+    end
+  },
+  {
+    "matsui54/denops-popup-preview.vim",
+    config = function()
+     vim.fn['popup_preview#enable']()
+    end
   },
 }
