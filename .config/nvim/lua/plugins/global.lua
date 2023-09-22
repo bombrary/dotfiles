@@ -113,7 +113,7 @@ return {
             },
           }
         })
-      end)
+      end, {})
 
     end
   },
