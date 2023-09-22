@@ -65,6 +65,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       "Shougo/ddc.vim",
+      "purescript-contrib/purescript-vim",
       "uga-rosa/ddc-nvim-lsp-setup",
     },
     config = function()
@@ -82,6 +83,9 @@ return {
         },
       }
       lspconfig.gopls.setup {}
+
+      lspconfig.purescriptls.setup {}
+      lspconfig.elmls.setup {}
 
 
       -- Global mappings.
