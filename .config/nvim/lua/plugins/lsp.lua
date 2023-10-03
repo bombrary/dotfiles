@@ -129,22 +129,22 @@ return {
         end,
       })
 
-      vim.api.nvim_create_autocmd('LspAttach', {
-        pattern = '*.py',
-        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-        callback = function(ev)
-          local path = vim.fn.expand("%:p")
-          vim.keymap.set('n', '<space>f', function()
-            vim.fn.execute(":w")
-            local res = vim.fn.system({
-              "black",
-              path,
-            })
-            vim.notify(res, vim.log.levels.INFO)
-            vim.fn.execute(":e")
-          end, opts)
-        end,
-      })
+      -- vim.api.nvim_create_autocmd('LspAttach', {
+      --   pattern = '*.py',
+      --   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      --   callback = function(ev)
+      --     local path = vim.fn.expand("%:p")
+      --     vim.keymap.set('n', '<space>f', function()
+      --       vim.fn.execute(":w")
+      --       local res = vim.fn.system({
+      --         "black",
+      --         path,
+      --       })
+      --       vim.notify(res, vim.log.levels.INFO)
+      --       vim.fn.execute(":e")
+      --     end, opts)
+      --   end,
+      -- })
 
     end,
   },
