@@ -145,10 +145,8 @@ return {
     "nvim-treesitter/nvim-treesitter",
     config = function()
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = "all",
-        ignore_installed = { "yaml", "ruby" },
+        ensure_installed = {},
         highlight = {
-          disable = { "yaml", "ruby" },
           enable = true,
         },
       }
