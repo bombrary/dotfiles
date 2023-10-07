@@ -7,7 +7,8 @@
   "ddc-source-nvim-lsp": { "branch": "main", "commit": "5a10fef27e152654c244dc639ebd0eaa5cd89ee6" },
   "ddc-ui-native": { "branch": "main", "commit": "cbcbe67cf73d61a5fdeb1d5c647c42a6c2f6349f" },
   "ddc.vim": { "branch": "main", "commit": "c73d08e82789abf8fc863eefb4c17d7a7bbdeaf6" },
-  "ddu-filter-matcher_substring": { "branch": "main", "commit": "61c0c634e83d2e92d5cda4624daa6be345f4ad8e" },
+  "ddu-filter-converter_devicon": { "branch": "main", "commit": "8bbf0a0457beb8defdd41abe0d6ea2fe877fa96c" },
+  "ddu-filter-fzf": { "branch": "main", "commit": "9b9f54cbcdb0baedfe766cae5c8ec4c74bdb79ad" },
   "ddu-kind-file": { "branch": "main", "commit": "b033b7330384f494d4256a55dd97696cb6c5230c" },
   "ddu-source-buffer": { "branch": "main", "commit": "fa9d6e8f678038abac2a8c6076057478a616048a" },
   "ddu-source-file_rec": { "branch": "main", "commit": "4cbab6e1e972b41023d08bb2e7dd4d2c08635f19" },
@@ -18,8 +19,11 @@
   "denops-signature_help": { "branch": "main", "commit": "e4522f5fe18adf014058d6cde5d553565b5290ba" },
   "denops.vim": { "branch": "main", "commit": "22e7ae3d712f190b3f46483e6b9dd50a99a9abbd" },
   "everforest": { "branch": "master", "commit": "b8ef2d0bde98645250a8997393aefba38e8c6ff3" },
+  "formatter.nvim": { "branch": "master", "commit": "34dcdfa0c75df667743b2a50dd99c84a557376f0" },
   "lazy.nvim": { "branch": "main", "commit": "64cb9b16f6d4f1c395de4ec672d9d79fffb5c3b4" },
+  "mason.nvim": { "branch": "main", "commit": "d66c60e17dd6fd8165194b1d14d21f7eb2c1697a" },
   "nvim-lspconfig": { "branch": "master", "commit": "a59d74e12340242c0735666fb2e91afdbe6f2496" },
   "nvim-treesitter": { "branch": "master", "commit": "691d73287a94e8ed82a383df82aabfe77ab4bcaa" },
-  "purescript-vim": { "branch": "main", "commit": "82348352e6568fcc0385bd7c99a8ead3a479feea" }
+  "purescript-vim": { "branch": "main", "commit": "82348352e6568fcc0385bd7c99a8ead3a479feea" },
+  "vim-go": { "branch": "master", "commit": "1401b576c6ac382529188d3d26cff866139f2f9a" }
 }
