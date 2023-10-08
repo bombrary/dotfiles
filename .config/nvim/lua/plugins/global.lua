@@ -22,12 +22,6 @@ return {
     ft = "go",
   },
   {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
-  },
-  {
     "mhartington/formatter.nvim",
     cmd = {
       "Mason",

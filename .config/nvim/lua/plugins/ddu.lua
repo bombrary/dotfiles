@@ -11,6 +11,10 @@ local function get_current_buf_text()
 end
 
 return {
+  { 
+    "ddu-test",
+    dir = "~/tmp/ddu-test"
+  },
   {
     "Shougo/ddu.vim",
     dependencies = {
@@ -22,6 +26,7 @@ return {
       "uga-rosa/ddu-filter-converter_devicon",
       "Shougo/ddu-kind-file",
       "Shougo/ddu-ui-ff",
+      "ddu-test",
     },
     config = function()
       local lines = vim.opt.lines:get()
@@ -53,36 +58,39 @@ return {
           file = {
             defaultAction = 'open',
           },
+          sample = {
+            defaultAction = 'echo',
+          },
         },
         uiParams = {
           ff = {
-          startFilter = true,
-          prompt = "> ",
-          cursorPos = 0,
-          split = "floating",
-          floatingBorder = "single",
-          filterFloatingPosition = "top",
-          autoAction = {
-            name = "preview",
-          },
-          startAutoAction = true,
-          previewFloating = true,
-          previewFloatingBorder = "single",
-          previewSplit = "vertical",
-          previewFloatingTitle = "Preview",
-          previewWindowOptions = {
-            { "&signcolumn", "no" },
-            { "&foldcolumn", 0 },
-            { "&foldenable", 0 },
-            { "&number", 0 },
-            { "&wrap", 0 },
-            { "&scrolloff", 0 },
-          },
-          highlights = {
-            floating = "Normal",
-            floatingBorder = "Normal",
-          },
-          ignoreEmpty = true,
+            startFilter = true,
+            prompt = "> ",
+            cursorPos = 0,
+            split = "floating",
+            floatingBorder = "single",
+            filterFloatingPosition = "top",
+            autoAction = {
+              name = "preview",
+            },
+            startAutoAction = true,
+            previewFloating = true,
+            previewFloatingBorder = "single",
+            previewSplit = "vertical",
+            previewFloatingTitle = "Preview",
+            previewWindowOptions = {
+              { "&signcolumn", "no" },
+              { "&foldcolumn", 0 },
+              { "&foldenable", 0 },
+              { "&number", 0 },
+              { "&wrap", 0 },
+              { "&scrolloff", 0 },
+            },
+            highlights = {
+              floating = "Normal",
+              floatingBorder = "Normal",
+            },
+            ignoreEmpty = true,
           },
         },
       })
@@ -173,6 +181,7 @@ return {
       vim.keymap.set('v', ',g', function()
         local lines = get_current_buf_text()
         local text = table.concat(lines, "\n")
+
         vim.fn['ddu#start']({
           sources = {
             {
@@ -185,18 +194,103 @@ return {
         })
       end)
 
-      vim.api.nvim_create_user_command('Grep', function(args)
+      vim.keymap.set('n', ',g', function()
+        text = vim.fn.input("keyword: ")
         vim.fn['ddu#start']({
           sources = {
             {
               name = 'rg',
               params = {
-                input = args['args']
+                input = text
               },
             },
           }
         })
-      end, { nargs = 1 })
-    end
+      end)
+
+      vim.keymap.set('n', ',s', function()
+        vim.fn['ddu#start']({
+          sources = {
+            {
+              name = 'sample',
+              params = {},
+            },
+          },
+        })
+      end)
+
+    end,
   },
+  {
+    "Shougo/ddu-ui-filer",
+    dependencies = {
+      "Shougo/ddu-source-file",
+      "Shougo/ddu-column-filename",
+      "Shougo/ddu.vim",
+    },
+    config = function()
+      vim.keymap.set('n', ',q', function()
+        vim.fn['ddu#start']({
+          ui = 'filer',
+          uiParams = {
+            filer = {
+              split = 'vertical',
+              splitDirection = 'topleft',
+              winWidth = 32,
+            }
+          },
+          sources = { { name = 'file', params = {}, } },
+          actionOptions = {
+            narrow = {
+              quit = false,
+            },
+          },
+          sourceOptions = {
+            _ = {
+              columns = { 'filename' },
+            },
+          },
+          kindOptions = {
+            file = {
+              defaultAction = 'open',
+            },
+          },
+        })
+      end)
+
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'ddu-filer',
+        callback = function(ev)
+          vim.keymap.set('n', '<CR>', function()
+            if vim.fn.line('.') == 1 then
+              vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'narrow', params = { path = '..' } })
+              return
+            end
+
+
+            local item = vim.fn['ddu#ui#get_item']()
+            if (item['isTree']) then
+              vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'narrow' } )
+            else
+              vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'open' })
+            end
+          end, { silent=true, buffer=true })
+
+          vim.keymap.set('n', '<Space>', function()
+            vim.fn['ddu#ui#filer#do_action']('toggleSelectItem')
+          end, { silent=true, buffer=true })
+
+          vim.keymap.set('n', 'o', function()
+            vim.fn['ddu#ui#filer#do_action']('expandItem', { mode = 'toggle' })
+          end, { silent=true, buffer=true })
+
+          vim.keymap.set('n', 'q', function()
+            vim.fn['ddu#ui#filer#do_action']('quit')
+          end, { silent=true, buffer=true })
+        end
+      })
+
+    end,
+  }
 }

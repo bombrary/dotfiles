@@ -74,7 +74,6 @@ return {
       -- Setup language servers.
       local lspconfig = require('lspconfig')
       lspconfig.pyright.setup {}
-      lspconfig.tsserver.setup {}
       lspconfig.terraform_lsp.setup{}
       lspconfig.rust_analyzer.setup {
         -- Server-specific settings. See `:help lspconfig-setup`
@@ -83,10 +82,19 @@ return {
         },
       }
       lspconfig.gopls.setup {}
-
       lspconfig.purescriptls.setup {}
       lspconfig.elmls.setup {}
-
+      lspconfig.denols.setup {
+        root_dir = lspconfig.util.root_pattern("denops/"),
+        init_options = {
+          lint = true,
+          unstable = true,
+        },
+      }
+      lspconfig.tsserver.setup {
+        root_dir = lspconfig.util.root_pattern("package.json"),
+        single_file_support = false;
+      }
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -129,23 +137,6 @@ return {
         end,
       })
 
-      -- vim.api.nvim_create_autocmd('LspAttach', {
-      --   pattern = '*.py',
-      --   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-      --   callback = function(ev)
-      --     local path = vim.fn.expand("%:p")
-      --     vim.keymap.set('n', '<space>f', function()
-      --       vim.fn.execute(":w")
-      --       local res = vim.fn.system({
-      --         "black",
-      --         path,
-      --       })
-      --       vim.notify(res, vim.log.levels.INFO)
-      --       vim.fn.execute(":e")
-      --     end, opts)
-      --   end,
-      -- })
-
     end,
   },
   {
@@ -159,5 +150,11 @@ return {
     config = function()
      vim.fn['popup_preview#enable']()
     end
+  },
+  {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
   },
 }
