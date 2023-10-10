@@ -70,10 +70,10 @@ return {
             split = "floating",
             floatingBorder = "single",
             filterFloatingPosition = "top",
-            autoAction = {
-              name = "preview",
-            },
-            startAutoAction = true,
+            --autoAction = {
+            --  name = "preview",
+            --},
+            --startAutoAction = true,
             previewFloating = true,
             previewFloatingBorder = "single",
             previewSplit = "vertical",
@@ -138,6 +138,10 @@ return {
 
           vim.keymap.set('n', 'i', function()
             vim.fn['ddu#ui#ff#do_action']('openFilterWindow')
+          end, { silent=true, buffer=true })
+
+          vim.keymap.set('n', 'p', function()
+            vim.fn['ddu#ui#ff#do_action']('preview')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', 'q', function()
