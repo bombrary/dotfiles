@@ -73,6 +73,7 @@ return {
 
       -- Setup language servers.
       local lspconfig = require('lspconfig')
+      lspconfig.ccls.setup {}
       lspconfig.pyright.setup {}
       lspconfig.terraform_lsp.setup{}
       lspconfig.rust_analyzer.setup {
