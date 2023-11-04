@@ -15,6 +15,7 @@ vim.opt.showmatch = true
 vim.opt.clipboard:append{'unnamedplus'}
 vim.opt.list = true
 vim.opt.listchars = {tab = '>-', trail = '*', nbsp = '+', eol = '↲', extends = '»', precedes = '«'}
+vim.opt.termguicolors = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -29,11 +30,4 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require'lazy'.setup("plugins", {
-  git = {
-    log = { "-8" }, -- show commits from the last 3 days
-    timeout = 120, -- kill processes that take more than 2 minutes
-    url_format = "git@github.com:%s.git",
-    filter = true,
-  },
-})
+require'lazy'.setup("plugins", {})
