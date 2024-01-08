@@ -14,12 +14,12 @@ return {
     config = function() 
       vim.fn['ddc#custom#patch_global']({
         ui = 'native',
-        sources = { 'around', 'nvim-lsp' },
+        sources = { 'around', 'lsp' },
         sourceOptions = {
           ['around'] = {
             mark = 'A',
           },
-          ['nvim-lsp'] = {
+          ['lsp'] = {
             mark = 'lsp',
             dup = 'keep',
             keywordPattern = '\\k+',
@@ -66,11 +66,8 @@ return {
     dependencies = {
       "Shougo/ddc.vim",
       "purescript-contrib/purescript-vim",
-      "uga-rosa/ddc-nvim-lsp-setup",
     },
     config = function()
-      require("ddc_nvim_lsp_setup").setup()
-
       -- Setup language servers.
       local lspconfig = require('lspconfig')
       lspconfig.ccls.setup {}
