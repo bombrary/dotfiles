@@ -153,10 +153,9 @@ return {
       vim.api.nvim_create_autocmd('FileType', {
         pattern = 'ddu-ff-filter',
         callback = function(ev)
-          vim.keymap.set('i', '<CR>', function()
-            vim.api.nvim_input("<ESC>")
-            vim.fn['ddu#ui#ff#do_action']('closeFilterWindow')
-          end, { silent=true, buffer=true })
+          vim.keymap.set('i', '<CR>',
+            "<ESC><Cmd>call ddu#ui#ff#do_action(\"closeFilterWindow\")<CR>",
+            { silent=true, buffer=true })
 
           vim.keymap.set('n', '<CR>', function()
             vim.fn['ddu#ui#ff#do_action']('closeFilterWindow')
