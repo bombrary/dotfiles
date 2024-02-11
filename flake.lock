@@ -4,12 +4,12 @@
       "flake": false,
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-9+oiE2EzDib60l9SJlXG1TXUoqiWivbGzhP2Qvulvig=",
-        "path": "/nix/store/qw5y47j273h0bz8qcdkiyiyfsbcj2dj0-source/dotfiles",
+        "narHash": "sha256-nPSb7Q7zYzW3Smxa1JSihaRnl71hCCuwK+ffiSgtkCQ=",
+        "path": "./dotfiles",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/qw5y47j273h0bz8qcdkiyiyfsbcj2dj0-source/dotfiles",
+        "path": "./dotfiles",
         "type": "path"
       }
     },
