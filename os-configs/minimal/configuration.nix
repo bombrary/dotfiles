@@ -16,7 +16,7 @@
 
   users.users.bombrary = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
   };
 
   # List packages installed in system profile. To search, run:
@@ -32,6 +32,8 @@
   programs.mtr.enable = true;
 
   services.openssh.enable = true;
+
+  virtualisation.docker.enable = true;
 
   # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
   # and migrated your data accordingly.

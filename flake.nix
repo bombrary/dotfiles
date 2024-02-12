@@ -9,7 +9,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dotfiles = {
-      url = "./dotfiles";
+      url = "path:./dotfiles";
       flake = false;
     };
   }; 
