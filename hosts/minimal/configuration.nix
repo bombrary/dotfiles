@@ -23,7 +23,7 @@
 
   users.users.bombrary = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
   };
 
   environment.systemPackages = with pkgs; [
@@ -40,9 +40,10 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  virtualisation.docker.enable = true;
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
 
