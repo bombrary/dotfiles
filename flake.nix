@@ -18,15 +18,29 @@
           ./hosts/minimal/configuration.nix
         ];
       };
+      desktop = nixos.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/desktop/configuration.nix
+        ];
+      };
     }; 
 
     homeConfigurations = {
-      bombrary = home-manager.lib.homeManagerConfiguration {
+      "bombrary@minimal" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           system = "x86_64-linux";
         };
         modules = [
-          ./home/bombrary/home.nix
+          ./home/bombrary-minimal/home.nix
+        ];
+      };
+      "bombrary@desktop" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+        };
+        modules = [
+          ./home/bombrary-desktop/home.nix
         ];
       };
     };
