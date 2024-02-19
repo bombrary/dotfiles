@@ -129,23 +129,23 @@ return {
         pattern = 'ddu-ff',
         callback = function(ev)
           vim.keymap.set('n', '<CR>', function()
-            vim.fn['ddu#ui#ff#do_action']('itemAction')
+            vim.fn['ddu#ui#do_action']('itemAction')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', '<Space>', function()
-            vim.fn['ddu#ui#ff#do_action']('toggleSelectItem')
+            vim.fn['ddu#ui#do_action']('toggleSelectItem')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', 'i', function()
-            vim.fn['ddu#ui#ff#do_action']('openFilterWindow')
+            vim.fn['ddu#ui#do_action']('openFilterWindow')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', 'p', function()
-            vim.fn['ddu#ui#ff#do_action']('preview')
+            vim.fn['ddu#ui#do_action']('preview')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', 'q', function()
-            vim.fn['ddu#ui#ff#do_action']('quit')
+            vim.fn['ddu#ui#do_action']('quit')
           end, { silent=true, buffer=true })
         end
       })
@@ -154,15 +154,15 @@ return {
         pattern = 'ddu-ff-filter',
         callback = function(ev)
           vim.keymap.set('i', '<CR>',
-            "<ESC><Cmd>call ddu#ui#ff#do_action(\"closeFilterWindow\")<CR>",
+            "<ESC><Cmd>call ddu#ui#do_action(\"closeFilterWindow\")<CR>",
             { silent=true, buffer=true })
 
           vim.keymap.set('n', '<CR>', function()
-            vim.fn['ddu#ui#ff#do_action']('closeFilterWindow')
+            vim.fn['ddu#ui#do_action']('closeFilterWindow')
           end, { silent=true, buffer=true })
 
           vim.keymap.set('n', 'q', function()
-            vim.fn['ddu#ui#ff#do_action']('closeFilterWindow')
+            vim.fn['ddu#ui#do_action']('closeFilterWindow')
           end, { silent=true, buffer=true })
         end
       })
