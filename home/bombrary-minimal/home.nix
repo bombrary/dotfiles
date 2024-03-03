@@ -14,6 +14,8 @@
     fd
     zig
     deno
+    rye
+    nodePackages.pyright
   ];
   
   programs.neovim = {
