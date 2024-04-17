@@ -19,10 +19,11 @@
   users.users.bombrary = {
     shell = pkgs.fish;
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
   };
 
   programs.fish.enable = true;
+  virtualisation.docker.enable = true;
 
   nix = {
     settings = {
