@@ -1,98 +1,30 @@
 return {
   {
-    "Shougo/ddc.vim",
-    dependencies = {
-      "vim-denops/denops.vim",
-      "Shougo/ddc-source-around",
-      "Shougo/ddc-source-nvim-lsp",
-      "Shougo/ddc-filter-matcher_head",
-      "Shougo/ddc-filter-sorter_rank",
-      "Shougo/ddc-ui-native",
-      "L3MON4D3/LuaSnip",
-    },
-    event = 'InsertEnter',
-    config = function() 
-      vim.fn['ddc#custom#patch_global']({
-        ui = 'native',
-        sources = { 'around', 'lsp' },
-        sourceOptions = {
-          ['around'] = {
-            mark = 'A',
-          },
-          ['lsp'] = {
-            mark = 'lsp',
-            dup = 'keep',
-            keywordPattern = '\\k+',
-            sorters = { 'sorter_lsp-kind' },
-          },
-          _ = {
-            matchers = { 'matcher_head' },
-            sorters = { 'sorter_rank' }
-          }
-        },
-        sourceParams = {
-            ['nvim-lsp'] = {
-              enableResolveItem = true,
-              enableAdditionalTextEdit = true,
-              confirmBehavior = 'replace',
-            },
-        },
-      })
-      vim.fn["denops#callback#register"](function(body)
-        require('luasnip').lsp_expand(body)
-      end)
-
-      vim.keymap.set('i', '<Tab>', function()
-        if vim.fn.pumvisible() == 1 then
-          return "<C-n>"
-        else
-          local pos = vim.inspect_pos()
-          if pos.col <= 0 then
-            return "<Tab>"
-          end
-          local c = vim.api.nvim_get_current_line():sub(pos.col, pos.col)
-          if string.match(c, "%s") then
-            return "<Tab>"
-          else
-            vim.fn["ddc#map#manual_complete"]()
-          end
-        end
-      end, { expr = true })
-      vim.fn['ddc#enable']()
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     dependencies = {
       "Shougo/ddc.vim",
-      "purescript-contrib/purescript-vim",
+      "Shougo/ddc-source-lsp",
     },
     config = function()
+      local capabilities = require(
+        "ddc_source_lsp"
+      ).make_client_capabilities()
+
       -- Setup language servers.
       local lspconfig = require('lspconfig')
-      lspconfig.ccls.setup {}
-      lspconfig.pyright.setup {}
-      lspconfig.terraform_lsp.setup{}
-      lspconfig.rust_analyzer.setup {
-        -- Server-specific settings. See `:help lspconfig-setup`
-        settings = {
-          ['rust-analyzer'] = {},
-        },
-      }
-      lspconfig.gopls.setup {}
-      lspconfig.purescriptls.setup {}
-      lspconfig.elmls.setup {}
+
+      lspconfig.pyright.setup { capabilities = capabilities }
+      lspconfig.gopls.setup { capabilities = capabilities }
+      lspconfig.purescriptls.setup { capabilities = capabilities }
       lspconfig.denols.setup {
         root_dir = lspconfig.util.root_pattern("denops/"),
         init_options = {
           lint = true,
           unstable = true,
         },
+        capabilities = capabilities
       }
-      lspconfig.tsserver.setup {
-        root_dir = lspconfig.util.root_pattern("package.json"),
-        single_file_support = false;
-      }
+
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -101,29 +33,30 @@ return {
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
       vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 
-      -- Use LspAttach autocommand to only map the following keys
-      -- after the language server attaches to the current buffer
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
           -- Enable completion triggered by <c-x><c-o>
+
           vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-          -- Buffer local mappings.
-          -- See `:help vim.lsp.*` for documentation on any of the below functions
           local opts = { buffer = ev.buf }
           vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
           vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
           vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
           vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
           vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
           vim.keymap.set('n', '<space>wl', function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+
           end, opts)
+
           vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
           vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+
           vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
           vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
           vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
@@ -134,25 +67,24 @@ return {
           end, opts)
         end,
       })
-
     end,
   },
   {
     "matsui54/denops-signature_help",
+    dependencies = {
+      "vim-denops/denops.vim",
+    },
     config = function()
      vim.fn['signature_help#enable']()
     end
   },
   {
     "matsui54/denops-popup-preview.vim",
+    dependencies = {
+      "vim-denops/denops.vim",
+    },
     config = function()
      vim.fn['popup_preview#enable']()
     end
-  },
-  {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
   },
 }

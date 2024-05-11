@@ -8,9 +8,15 @@
       url = github:nix-community/home-manager;
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl = {
+      type = "github";
+      owner = "nix-community";
+      repo = "NixOS-WSL";
+      ref = "2311.5.3";
+    };
   };
 
-  outputs = { self, nixos, nixpkgs, home-manager }: {
+  outputs = { self, nixos, nixpkgs, home-manager, nixos-wsl }: {
     nixosConfigurations = {
       minimal = nixos.lib.nixosSystem {
         system = "x86_64-linux";
@@ -23,6 +29,15 @@
         modules = [
           ./hosts/desktop/configuration.nix
         ];
+      };
+      wsl = nixos.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/wsl/configuration.nix
+        ];
+        specialArgs = {
+          inherit nixos-wsl;
+        };
       };
     }; 
 
@@ -41,6 +56,14 @@
         };
         modules = [
           ./home/bombrary-desktop/home.nix
+        ];
+      };
+      "bombrary@wsl" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+        };
+        modules = [
+          ./home/bombrary-wsl/home.nix
         ];
       };
     };
