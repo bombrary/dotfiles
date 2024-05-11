@@ -244,6 +244,8 @@
     };
   };
 
+  programs.nix-ld.enable = true;
+
   # Install Steam
    programs.steam = {
      enable = true;
