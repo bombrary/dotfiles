@@ -17,12 +17,12 @@
   wsl.defaultUser = "nixos";
 
   users.users.bombrary = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" ];
   };
 
-  programs.fish.enable = true;
+  programs.zsh.enable = true;
   virtualisation.docker.enable = true;
 
   nix = {
