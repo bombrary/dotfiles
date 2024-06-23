@@ -15,6 +15,7 @@
     ccls
     ghq
     peco
+    textlint
   ];
 
   programs.direnv = {
@@ -49,9 +50,7 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza --icons --classify";
-      la = "eza --all --icons --classify";
-      ll = "eza --long --all --git --icons";
+      ls = "eza --icons";
       cat = "bat";
     };
     initExtra = (builtins.readFile ../../config/peco_settings.zsh) + ''

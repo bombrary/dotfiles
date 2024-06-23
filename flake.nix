@@ -69,9 +69,9 @@
         modules = [
           ./home/bombrary-wsl/home.nix
         ];
-        extraSpecialArgs = [
-          z-src
-        ];
+        extraSpecialArgs = {
+          inherit z-src;
+        };
       };
     };
   };
