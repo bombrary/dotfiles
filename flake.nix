@@ -14,9 +14,13 @@
       repo = "NixOS-WSL";
       ref = "2311.5.3";
     };
+    z-src = {
+      url = github:rupa/z;
+      flake = false;
+    };
   };
 
-  outputs = { self, nixos, nixpkgs, home-manager, nixos-wsl }: {
+  outputs = { self, nixos, nixpkgs, home-manager, nixos-wsl, z-src }: {
     nixosConfigurations = {
       minimal = nixos.lib.nixosSystem {
         system = "x86_64-linux";
@@ -65,6 +69,15 @@
         modules = [
           ./home/bombrary-wsl/home.nix
         ];
+        extraSpecialArgs = {
+          inherit z-src;
+        };
+      };
+      "bombrary@macos" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+	  system = "aarch64-darwin";
+	};
+        modules = [ ./home/macos/home.nix ];
       };
     };
   };

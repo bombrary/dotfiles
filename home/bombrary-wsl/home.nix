@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, z-src, ...}: {
   home = rec {
     username = "bombrary";
     homeDirectory = "/home/${username}";
@@ -13,7 +13,17 @@
     deno
     zig
     ccls
+    ghq
+    peco
+    textlint
   ];
+
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true; # see note on other shells below
+    nix-direnv.enable = true;
+  };
+
 
   programs.tmux = {
     enable = true;
@@ -23,13 +33,45 @@
     '';
   };
 
-  programs.fish = {
+  programs.starship = {
     enable = true;
+    settings = {
+      status = {
+        disabled = false;
+      };
+      time = {
+        disabled = false;
+        utc_time_offset = "+9";
+      };
+    };
+  };
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
     shellAliases = {
-      ls = "eza --icons --classify";
-      la = "eza --all --icons --classify";
-      ll = "eza --long --all --git --icons";
+      ls = "eza --icons";
       cat = "bat";
+    };
+    initExtra = (builtins.readFile ../../config/peco_settings.zsh) + ''
+    . ${z-src}/z.sh
+    '';
+
+    prezto = {
+      enable = true;
+      pmodules = [
+        "environment"
+        "terminal"
+        "editor"
+        "history"
+        "directory"
+        "spectrum"
+        "utility"
+        "completion"
+        "git"
+        "syntax-highlighting"
+        "prompt"
+      ];
     };
   };
 
@@ -45,6 +87,10 @@
     "lua" = {
       source = ../../config/nvim/lua;
       target = ".config/nvim/lua";
+    };
+    "z" = {
+      source = "${z-src}/z.sh";
+      target = "z/z.sh";
     };
   };
 

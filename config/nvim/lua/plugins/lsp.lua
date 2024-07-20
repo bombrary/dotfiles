@@ -24,6 +24,21 @@ return {
         },
         capabilities = capabilities
       }
+      lspconfig.efm.setup {
+        init_options = { documentFormatting = true },
+        single_file_support = true,
+        filetypes = { 'markdown' },
+        settings = {
+            rootMarkers = { ".git/" },
+            languages = {
+                markdown = { {
+                    lintIgnoreExitCode = true,
+                    lintCommand = [[textlint -f json ${INPUT} | jq -r '.[] | .filePath as $filePath | .messages[] | "1;\($filePath):\(.line):\(.column):\n2;\(.message | split("\n")[0])\n3;[\(.ruleId)]"']],
+                    lintFormats = { '%E1;%E%f:%l:%c:', '%C2;%m', '%C3;%m%Z' },
+                } }
+            }
+        capabilities = capabilities
+      }
 
 
       -- Global mappings.
