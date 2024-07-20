@@ -9,6 +9,17 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+  
+  fileSystems."/mnt/drive" = {
+    device = "/dev/disk/by-uuid/FA59-1A3F";
+    fsType = "exfat";
+    options = [
+      "defaults"
+      "nofail"
+      "uid=1000"
+      "gid=100"
+    ];
+  };
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -79,12 +90,12 @@
   services.xserver.enable = true;
 
   # Enable the i3wm Environment.
+  services.displayManager = {
+    defaultSession = "none+i3";
+  };
   services.xserver = {
     displayManager.gdm.enable = true;
     desktopManager.xterm.enable = false;
-    displayManager = {
-      defaultSession = "none+i3";
-    };
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -96,9 +107,9 @@
   };
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
 
