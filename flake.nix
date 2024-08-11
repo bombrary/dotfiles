@@ -83,6 +83,9 @@
     };
     templates = {
       purescript.path = ./templates/purescript;
+      go.path = ./templates/go;
+      python-rye.path = ./templates/python-rye;
+      rust.path = ./templates/rust;
     };
   };
 }
