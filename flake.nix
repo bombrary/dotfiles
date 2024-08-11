@@ -81,5 +81,8 @@
         };
       };
     };
+    templates = {
+      purescript.path = ./templates/purescript;
+    };
   };
 }
