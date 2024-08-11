@@ -74,10 +74,11 @@
         };
       };
       "bombrary@macos" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-	  system = "aarch64-darwin";
-	};
+        pkgs = import nixpkgs { system = "aarch64-darwin"; };
         modules = [ ./home/macos/home.nix ];
+        extraSpecialArgs = {
+          inherit z-src;
+        };
       };
     };
   };
