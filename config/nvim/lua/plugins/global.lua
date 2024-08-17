@@ -48,5 +48,5 @@ return {
       }
     end,
   },
-
+  { "purescript-contrib/purescript-vim" },
 }
