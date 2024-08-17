@@ -37,6 +37,7 @@ return {
                     lintFormats = { '%E1;%E%f:%l:%c:', '%C2;%m', '%C3;%m%Z' },
                 } }
             }
+        },
         capabilities = capabilities
       }
 

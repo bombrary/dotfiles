@@ -9,17 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-  
-  fileSystems."/mnt/drive" = {
-    device = "/dev/disk/by-uuid/FA59-1A3F";
-    fsType = "exfat";
-    options = [
-      "defaults"
-      "nofail"
-      "uid=1000"
-      "gid=100"
-    ];
-  };
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -153,14 +142,14 @@
       zoom
       discord
     ];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
 
   programs = {
     git = {
       enable = true;
     };
-    fish = {
+    zsh = {
       enable = true;
     };
     tmux = {

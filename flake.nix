@@ -61,6 +61,9 @@
         modules = [
           ./home/bombrary-desktop/home.nix
         ];
+        extraSpecialArgs = {
+          inherit z-src;
+        };
       };
       "bombrary@wsl" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, z-src, ... }:
 {
   home = rec {
     username = "bombrary";
@@ -34,6 +34,7 @@
     maim
     xclip
     xdotool
+    peco
 
   # compilers and interperters
     deno
@@ -90,15 +91,46 @@
   };
 
 
-  programs.fish = {
+  programs.zsh = {
     enable = true;
+    enableCompletion = true;
     shellAliases = {
-      ls = "exa --icons";
+      ls = "eza --icons";
       cat = "bat";
     };
-    loginShellInit = ''
-      fish_add_path ~/go/bin
+    initExtra = (builtins.readFile ../../config/peco_settings.zsh) + ''
+    . ${z-src}/z.sh
     '';
+
+    prezto = {
+      enable = true;
+      pmodules = [
+        "environment"
+        "terminal"
+        "editor"
+        "history"
+        "directory"
+        "spectrum"
+        "utility"
+        "completion"
+        "git"
+        "syntax-highlighting"
+        "prompt"
+      ];
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+      status = {
+        disabled = false;
+      };
+      time = {
+        disabled = false;
+        utc_time_offset = "+9";
+      };
+    };
   };
 
   programs.go = {
