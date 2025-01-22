@@ -58,6 +58,9 @@
         disabled = false;
         utc_time_offset = "+9";
       };
+      character = {
+        success_symbol = "[\\$](bold green)";
+      };
     };
   };
 
