@@ -16,6 +16,12 @@
     ghq
     peco
     textlint
+    uv
+    pyright
+    chromedriver
+    chromium
+    ncurses
+    jq
   ];
 
   programs.direnv = {
@@ -28,22 +34,10 @@
   programs.tmux = {
     enable = true;
     keyMode = "vi";
+    terminal = "tmux-256color";
     extraConfig = ''
       run-shell ${pkgs.tmuxPlugins.nord}/share/tmux-plugins/nord/nord.tmux
     '';
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = {
-      status = {
-        disabled = false;
-      };
-      time = {
-        disabled = false;
-        utc_time_offset = "+9";
-      };
-    };
   };
 
   programs.zsh = {
@@ -53,8 +47,11 @@
       ls = "eza --icons";
       cat = "bat";
     };
-    initExtra = (builtins.readFile ../../config/peco_settings.zsh) + ''
+
+    initContent = (builtins.readFile ../../config/peco_settings.zsh) + ''
     . ${z-src}/z.sh
+
+    export PROMPT="%F{10}%n@%m%f:%F{12}%~%f%# "
     '';
 
     prezto = {
@@ -70,7 +67,6 @@
         "completion"
         "git"
         "syntax-highlighting"
-        "prompt"
       ];
     };
   };

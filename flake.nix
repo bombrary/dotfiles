@@ -2,7 +2,7 @@
   description = "NixOS and Home Manager Configuration";
 
   inputs = {
-    nixos.url = github:NixOS/nixpkgs/nixos-24.05;
+    nixos.url = github:NixOS/nixpkgs/nixos-25.05;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
     home-manager = {
       url = github:nix-community/home-manager;
@@ -12,7 +12,7 @@
       type = "github";
       owner = "nix-community";
       repo = "NixOS-WSL";
-      ref = "2311.5.3";
+      ref = "release-25.05";
     };
     z-src = {
       url = github:rupa/z;
