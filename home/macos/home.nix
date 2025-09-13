@@ -24,14 +24,10 @@
     eza
     bat
     git
-    obsidian
-    alacritty
     deno
     ghq
     peco
   ];
-
-  programs.tmux.enable = true;
 
   programs.neovim = {
     enable = true;
@@ -48,33 +44,27 @@
   };
 
 
-  programs.starship = {
+  programs.tmux = {
     enable = true;
-    settings = {
-      status = {
-        disabled = false;
-      };
-      time = {
-        disabled = false;
-        utc_time_offset = "+9";
-      };
-      character = {
-        success_symbol = "[\\$](bold green)";
-      };
-    };
+    keyMode = "vi";
+    terminal = "tmux-256color";
+    extraConfig = ''
+      run-shell ${pkgs.tmuxPlugins.nord}/share/tmux-plugins/nord/nord.tmux
+    '';
   };
 
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza --icons --classify";
-      la = "eza --all --icons --classify";
-      ll = "eza --long --all --git --icons";
+      ls = "eza --icons";
       cat = "bat";
     };
-    initExtra = (builtins.readFile ../../config/peco_settings.zsh) + ''
+
+    initContent = (builtins.readFile ../../config/peco_settings.zsh) + ''
     . ${z-src}/z.sh
+
+    export PROMPT="%F{10}%n@%m%f:%F{12}%~%f%# "
     '';
 
     prezto = {
@@ -90,7 +80,6 @@
         "completion"
         "git"
         "syntax-highlighting"
-        "prompt"
       ];
     };
   };
