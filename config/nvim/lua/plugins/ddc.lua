@@ -8,6 +8,7 @@ return {
       "Shougo/ddc-filter-matcher_head",
       "Shougo/ddc-filter-sorter_rank",
       "Shougo/ddc-source-lsp",
+      "Shougo/ddc-filter-sorter_lsp_kind",
     },
     event="InsertEnter",
     config = function()
@@ -23,7 +24,7 @@ return {
           lsp = {
             mark = "lsp",
             forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
-            sorters = { 'sorter_lsp-kind' },
+            sorters = { 'sorter_lsp_kind' },
           }
         },
       })

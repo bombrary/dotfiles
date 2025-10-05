@@ -2,48 +2,28 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "Shougo/ddc.vim",
       "Shougo/ddc-source-lsp",
     },
     config = function()
-      local capabilities = require(
-        "ddc_source_lsp"
-      ).make_client_capabilities()
+      vim.lsp.config('*', {
+        capabilities = require('ddc_source_lsp').make_client_capabilities(),
+      })
 
       -- Setup language servers.
-      local lspconfig = require('lspconfig')
+      vim.lsp.enable("pyright")
+      vim.lsp.enable("gopls")
+      vim.lsp.enable("purescriptls")
+      vim.lsp.enable("rust_analyzer")
 
-      lspconfig.pyright.setup { capabilities = capabilities }
-      lspconfig.gopls.setup { capabilities = capabilities }
-      lspconfig.purescriptls.setup { capabilities = capabilities }
-      lspconfig.denols.setup {
-        root_dir = lspconfig.util.root_pattern("denops/"),
-        init_options = {
-          lint = true,
-          unstable = true,
-        },
-        capabilities = capabilities
-      }
-      lspconfig.efm.setup {
-        init_options = { documentFormatting = true },
-        single_file_support = true,
-        filetypes = { 'markdown' },
-        settings = {
-          rootMarkers = { ".git/" },
-          languages = {
-              markdown = { {
-                  lintIgnoreExitCode = true,
-                  lintCommand = [[textlint -f json ${INPUT} | jq -r '.[] | .filePath as $filePath | .messages[] | "1;\($filePath):\(.line):\(.column):\n2;\(.message | split("\n")[0])\n3;[\(.ruleId)]"']],
-                  lintFormats = { '%E1;%E%f:%l:%c:', '%C2;%m', '%C3;%m%Z' },
-              } }
-          }
-        },
-        capabilities = capabilities,
-      }
-      lspconfig.rust_analyzer.setup {
-        capabilities = capabilities,
-      }
-
+      vim.lsp.enable("denols")
+      -- lspconfig.denols.setup {
+      --   root_dir = lspconfig.util.root_pattern("denops/"),
+      --   init_options = {
+      --     lint = true,
+      --     unstable = true,
+      --   },
+      --   capabilities = capabilities
+      -- }
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
