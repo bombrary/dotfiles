@@ -26,7 +26,6 @@
     git
     deno
     ghq
-    peco
   ];
 
   programs.neovim = {
@@ -61,9 +60,7 @@
       cat = "bat";
     };
 
-    initContent = (builtins.readFile ../../config/peco_settings.zsh) + ''
-    . ${z-src}/z.sh
-
+    initContent = ''
     export PROMPT="%F{10}%n@%m%f:%F{12}%~%f%# "
     '';
 
