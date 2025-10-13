@@ -16,7 +16,12 @@
     ghq
     peco
     textlint
-    hugo
+    uv
+    pyright
+    chromedriver
+    chromium
+    ncurses
+    jq
   ];
 
   programs.direnv = {
@@ -34,7 +39,6 @@
       run-shell ${pkgs.tmuxPlugins.nord}/share/tmux-plugins/nord/nord.tmux
     '';
   };
-
 
   programs.zsh = {
     enable = true;
