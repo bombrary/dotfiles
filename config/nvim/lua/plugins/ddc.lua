@@ -7,6 +7,7 @@ return {
       "Shougo/ddc-source-around",
       "Shougo/ddc-filter-matcher_head",
       "Shougo/ddc-filter-sorter_rank",
+      "Shougo/ddc-filter-sorter_lsp_kind",
       "Shougo/ddc-source-lsp",
       "Shougo/ddc-filter-sorter_lsp_kind",
     },
