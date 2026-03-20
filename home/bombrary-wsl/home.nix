@@ -44,8 +44,8 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza --icons";
-      cat = "bat";
+      ls = "eza";
+      cat = "bat -p";
     };
     initContent = (builtins.readFile ../../config/peco_settings.zsh) + ''
     . ${z-src}/z.sh

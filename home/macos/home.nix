@@ -35,10 +35,12 @@
 
   programs.git = {
     enable = true;
-    userName = "bombrary";
-    userEmail = "bombra108@gmail.com";
-    extraConfig = {
-      credential.helper = "store";
+    settings = {
+      user.name = "bombrary";
+      user.email = "bombra108@gmail.com";
+      extraConfig = {
+        credential.helper = "store";
+      };
     };
   };
 
@@ -56,12 +58,13 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza --icons";
-      cat = "bat";
+      ls = "eza";
+      cat = "bat -p";
     };
 
     initContent = ''
     export PROMPT="%F{10}%n@%m%f:%F{12}%~%f%# "
+    export PATH="$HOME/.local/bin:$PATH"
     '';
 
     prezto = {
