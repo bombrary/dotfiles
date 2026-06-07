@@ -1,6 +1,7 @@
 { config, pkgs, lib, z-src, ... }:
 
 {
+
   home.username = "bombrary";
   home.homeDirectory = "/Users/bombrary";
 
@@ -26,11 +27,21 @@
     git
     deno
     ghq
+    git-filter-repo
+    uv
+    bun
+    ffmpeg
+    portaudio
+    hugo
+    tree-sitter
   ];
 
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    initLua = builtins.readFile ../../config/nvim/init.lua;
+    withPython3 = false;
+    withRuby = false;
   };
 
   programs.git = {
@@ -40,6 +51,7 @@
       user.email = "bombra108@gmail.com";
       extraConfig = {
         credential.helper = "store";
+        core.quotepath  = false;
       };
     };
   };
@@ -59,7 +71,7 @@
     enableCompletion = true;
     shellAliases = {
       ls = "eza";
-      cat = "bat -p";
+      sed = "gnused";
     };
 
     initContent = ''
@@ -90,10 +102,6 @@
     ".tmux.conf" = {
       source = ../../config/tmux/.tmux.conf;
       target = ".tmux.conf";
-    };
-    "init.lua" = {
-      source = ../../config/nvim/init.lua;
-      target = ".config/nvim/init.lua";
     };
     "lua" = {
       source = ../../config/nvim/lua;
