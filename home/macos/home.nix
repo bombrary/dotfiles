@@ -26,6 +26,7 @@
     bat
     git
     deno
+    gh
     ghq
     git-filter-repo
     uv
@@ -34,6 +35,13 @@
     portaudio
     hugo
     tree-sitter
+    lima
+    yt-dlp
+    terminal-notifier
+    (runCommand "my-gnused" {} ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.gnused}/bin/sed $out/bin/gnused
+    '')
   ];
 
   programs.neovim = {

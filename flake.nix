@@ -14,13 +14,14 @@
       repo = "NixOS-WSL";
       ref = "release-25.05";
     };
-    z-src = {
-      url = github:rupa/z;
-      flake = false;
+    nixos-lima = {
+      url = "github:nixos-lima/nixos-lima/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixos, nixpkgs, home-manager, nixos-wsl, z-src }: {
+  outputs = { self, nixos, nixpkgs, home-manager, nixos-wsl, nixos-lima, ... }@inputs:
+  {
     nixosConfigurations = {
       minimal = nixos.lib.nixosSystem {
         system = "x86_64-linux";
@@ -43,6 +44,13 @@
           inherit nixos-wsl;
         };
       };
+      lima = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          nixos-lima.nixosModules.lima
+          ./hosts/lima/nixos-lima-config.nix
+        ];
+      };
     }; 
 
     homeConfigurations = {
@@ -61,9 +69,6 @@
         modules = [
           ./home/bombrary-desktop/home.nix
         ];
-        extraSpecialArgs = {
-          inherit z-src;
-        };
       };
       "bombrary@wsl" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
@@ -72,16 +77,14 @@
         modules = [
           ./home/bombrary-wsl/home.nix
         ];
-        extraSpecialArgs = {
-          inherit z-src;
-        };
       };
       "bombrary@macos" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "aarch64-darwin"; };
         modules = [ ./home/macos/home.nix ];
-        extraSpecialArgs = {
-          inherit z-src;
-        };
+      };
+      "bombrary@lima" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs { system = "aarch64-linux"; };
+        modules = [ ./home/lima/home.nix ];
       };
     };
     templates = {
